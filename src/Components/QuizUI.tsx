@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { QuizData } from "./QuizDataa";
 
 const QuizUI = () => {
+  const totalScore = QuizData.length;
   const [number, setNumber] = useState(1);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
@@ -26,12 +27,14 @@ const QuizUI = () => {
       setScore(score + 1)
     }
     handleClick()
+    setAanswerVar(-1);
   }
 
   function handleStartAgain() {
     setCurrentQuestion(0);
     setNumber(1);
     setShowTotalScore(false);
+    setAanswerVar(-1);
   }
 
   function SetVar(index: number) {
@@ -50,11 +53,13 @@ const QuizUI = () => {
       </div>
       <div className="flex flex-col">
         {QuizData[currentQuestion].options.map((option, index) => (
-          <button
-            key={index}
-            onClick={() => SetVar(index+1)}
-            className=" text-red-900 rounded hover:rounded-lg bg-red-300 m-2 p-2"
-          >
+           <button
+           key={index}
+           onClick={() => SetVar(index + 1)}
+           className={`text-red-900 rounded hover:rounded-lg m-2 p-2 ${
+             answerVar === index + 1 ? "bg-green-300" : "bg-red-300"
+           }`}
+         >
             {option}
           </button>
         ))}
@@ -63,7 +68,7 @@ const QuizUI = () => {
         {showTotalScore ? (
           <div>
             {" "}
-            Total Score : {score} <br />{" "}
+            Total Score : {score} out of {totalScore}<br />{" "}
             <button
               onClick={handleStartAgain}
               className="p-1 text-blue-700 bg-blue-400 rounded"
